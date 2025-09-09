@@ -2,70 +2,238 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Text to Speech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎙️ Text to Speech</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* Reset */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f8;
-      color: #333;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      overflow: hidden;
     }
 
     .container {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      background: #ffffff;
+      color: #333;
+      padding: 40px 50px;
+      border-radius: 20px;
       max-width: 600px;
       width: 90%;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.3);
       text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      position: relative;
     }
 
     h1 {
-      margin-bottom: 20px;
-      font-size: 2em;
-      color: #2c3e50;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      color: #4a4a4a;
+      letter-spacing: 2px;
+      user-select: none;
     }
 
     textarea {
       width: 100%;
-      padding: 15px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
+      padding: 20px;
+      font-size: 1.1em;
+      border-radius: 15px;
+      border: 2px solid #ddd;
       resize: none;
-      font-size: 1em;
-      margin-bottom: 20px;
-      background-color: #fdfdfd;
+      background-color: #f9f9f9;
       color: #333;
+      box-shadow: inset 2px 2px 5px #ccc;
+      transition: border-color 0.3s ease;
+      font-weight: 500;
+      min-height: 140px;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 10px #667eea;
+      background-color: #fff;
     }
 
     button {
-      background-color: #3498db;
-      color: #fff;
+      margin-top: 25px;
+      background: linear-gradient(45deg, #667eea, #764ba2);
       border: none;
-      padding: 12px 25px;
-      font-size: 1em;
-      border-radius: 8px;
+      color: #fff;
+      padding: 15px 40px;
+      font-size: 1.2em;
+      font-weight: 600;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
 
-    button:hover {
-      background-color: #2980b9;
+    button:disabled {
+      background: #bbb;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    button:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.9);
+    }
+
+    /* Spinner inside button */
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #fff;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg);}
+      100% { transform: rotate(360deg);}
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1;}
+    }
+
+    /* Animated background circles */
+    .background-circles {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.2;
+      animation: pulse 6s ease-in-out infinite;
+      filter: blur(40px);
+      mix-blend-mode: screen;
+    }
+
+    .circle1 {
+      width: 400px;
+      height: 400px;
+      background: #667eea;
+      top: -150px;
+      left: -150px;
+      animation-delay: 0s;
+    }
+
+    .circle2 {
+      width: 350px;
+      height: 350px;
+      background: #764ba2;
+      bottom: -120px;
+      right: -120px;
+      animation-delay: 2s;
+    }
+
+    .circle3 {
+      width: 250px;
+      height: 250px;
+      background: #a044ff;
+      top: 60%;
+      left: 75%;
+      animation-delay: 4s;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.2;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 0.35;
+      }
+    }
+
+    /* Audio icon animation */
+    @keyframes soundWave {
+      0%, 100% {
+        transform: scaleY(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scaleY(1.5);
+        opacity: 1;
+      }
+    }
+
+    .sound-wave {
+      display: inline-block;
+      width: 4px;
+      height: 16px;
+      background: white;
+      margin-left: 3px;
+      border-radius: 2px;
+      animation: soundWave 1s infinite ease-in-out;
+    }
+
+    .sound-wave:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .sound-wave:nth-child(3) {
+      animation-delay: 0.4s;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎙️ Text to Speech</h1>
-    <textarea id="textInput" placeholder="Type something inspiring..." rows="5"></textarea>
-    <br>
-    <button onclick="speak()">🔊 Speak</button>
+  <div class="background-circles" aria-hidden="true">
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    <div class="circle circle3"></div>
+  </div>
+
+  <div class="container" role="main" aria-labelledby="title">
+    <h1 id="title">🎙️ Text to Speech</h1>
+    <textarea
+      id="textInput"
+      placeholder="Type something inspiring..."
+      rows="5"
+      aria-label="Text input for speech synthesis"
+      spellcheck="false"
+    ></textarea>
+    <br />
+    <button id="speakBtn" aria-live="polite" aria-busy="false">
+      🔊 Speak
+      <!-- Sound waves for animation -->
+      <span class="sound-wave"></span>
+      <span class="sound-wave"></span>
+      <span class="sound-wave"></span>
+    </button>
   </div>
 
   <script>
@@ -73,12 +241,22 @@
     const url = "https://api.au-syd.text-to-speech.watson.cloud.ibm.com/v1/synthesize";
     const voice = "en-US_AllisonV3Voice";
 
+    const textInput = document.getElementById("textInput");
+    const speakBtn = document.getElementById("speakBtn");
+
     async function speak() {
-      const text = document.getElementById("textInput").value;
-      if (!text.trim()) {
+      const text = textInput.value.trim();
+      if (!text) {
         alert("Please enter some text.");
         return;
       }
+
+      speakBtn.disabled = true;
+      speakBtn.setAttribute("aria-busy", "true");
+      speakBtn.innerHTML = `
+        🔊 Speaking
+        <span class="spinner" aria-hidden="true"></span>
+      `;
 
       const headers = new Headers();
       headers.append("Authorization", "Basic " + btoa("apikey:" + apiKey));
@@ -106,11 +284,38 @@
         const audioUrl = URL.createObjectURL(audioBlob);
         const audio = new Audio(audioUrl);
         audio.play();
+
+        // Wait for audio to finish playing to re-enable button
+        audio.onended = () => {
+          resetButton();
+          URL.revokeObjectURL(audioUrl);
+        };
       } catch (error) {
         console.error("Error:", error);
-        alert("Failed to synthesize speech.");
+        alert("Failed to synthesize speech. Please try again.");
+        resetButton();
       }
     }
+
+    function resetButton() {
+      speakBtn.disabled = false;
+      speakBtn.setAttribute("aria-busy", "false");
+      speakBtn.innerHTML = `
+        🔊 Speak
+        <span class="sound-wave"></span>
+        <span class="sound-wave"></span>
+        <span class="sound-wave"></span>
+      `;
+    }
+
+    speakBtn.addEventListener("click", speak);
+
+    // Optional: Allow "Ctrl + Enter" to trigger speech
+    textInput.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key === "Enter") {
+        speak();
+      }
+    });
   </script>
 </body>
 </html>
